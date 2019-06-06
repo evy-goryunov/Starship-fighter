@@ -41,7 +41,7 @@ namespace Starship_fighter
 				Update();
 			}
 			//таймер
-			Timer timer = new Timer { Interval = 100 };
+			Timer timer = new Timer { Interval = 70 };
 			timer.Start();
 			timer.Tick += Timer_Tick;
 
@@ -61,21 +61,22 @@ namespace Starship_fighter
 			foreach (BaseObject obj in _objs) obj.Draw();
 			Buffer.Render();
 		}
-
+		// массив с фигурами
 		public static BaseObject[] _objs;
-
-		// метод загрузки объектов в массив для последующего их выведения на экран
+		/// <summary>
+		/// метод загрузки фигур в массив для последующего их выведения на экран
+		/// </summary>
 		public static void Load()
 		{
-			_objs = new BaseObject[30];
-			for (int i = 0; i < _objs.Length / 2; i++)
-			{
-				_objs[i] = new BaseObject(new Point(600, i * 20), new Point(-i, -i), new Size(20, 20));
-			}
-			for(int i = _objs.Length / 2; i < _objs.Length; i++)
-			{
-				_objs[i] = new Star(new Point(600, i * 20), new Point(50-i, 0), new Size(5, 5));
-			}
+			_objs = new BaseObject[60];
+			//for (int i = 0; i < _objs.Length / 2; i++)
+			//{
+			//	_objs[i] = new BaseObject(new Point(600, i * 20), new Point(-i, -i), new Size(20, 20));
+			//}
+			for(int i = 0; i < _objs.Length; i++)
+			{                                 //X   //Y            //X  //Y
+				_objs[i] = new Star(new Point(700, i*20), new Point(20+i, 0), new Size(5, 5));
+			}										     //значение смещения //размер фигуры
 		}
 
 		public static void Update()

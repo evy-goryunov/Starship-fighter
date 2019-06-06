@@ -4,7 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+/// <summary>
+/// Горюнов Егвений
+/// Добавить свои объекты в иерархию объектов, чтобы получился 
+/// красивый задний фон, похожий на полет в звездном пространстве.
+///* Заменить кружочки картинками, используя метод DrawImage.
+/// </summary>
 namespace Starship_fighter
 {
 	class Program
