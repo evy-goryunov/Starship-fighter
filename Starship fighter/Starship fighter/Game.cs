@@ -41,7 +41,7 @@ namespace Starship_fighter
 				Update();
 			}
 			//таймер
-			Timer timer = new Timer { Interval = 70 };
+			Timer timer = new Timer { Interval = 100 };
 			timer.Start();
 			timer.Tick += Timer_Tick;
 
@@ -60,28 +60,41 @@ namespace Starship_fighter
 			//выводим массив BaseObject _objs на экран
 			foreach (BaseObject obj in _objs) obj.Draw();
 			Buffer.Render();
+			foreach (BaseObject obj in _objs2) obj.Draw();
+			Buffer.Render();
 		}
 		// массив с фигурами
 		public static BaseObject[] _objs;
+		public static BaseObject[] _objs2;
 		/// <summary>
 		/// метод загрузки фигур в массив для последующего их выведения на экран
 		/// </summary>
 		public static void Load()
 		{
 			_objs = new BaseObject[60];
+			_objs2 = new BaseObject[30];
 			//for (int i = 0; i < _objs.Length / 2; i++)
 			//{
 			//	_objs[i] = new BaseObject(new Point(600, i * 20), new Point(-i, -i), new Size(20, 20));
 			//}
-			for(int i = 0; i < _objs.Length; i++)
+			for(int i = 0; i < _objs.Length / 2; i++)
 			{                                 //X   //Y            //X  //Y
 				_objs[i] = new Star(new Point(700, i*20), new Point(20+i, 0), new Size(5, 5));
 			}										     //значение смещения //размер фигуры
+			for(int i = _objs.Length / 2; i < _objs.Length; i++)
+			{
+				_objs[i] = new SpaceTrash(new Point(100, i * 5), new Point(+i, i), new Size(1, 1));
+			}
+			for (int i = 0; i < _objs2.Length; i++)
+			{
+				_objs2[i] = new SpaceTrash(new Point(350, i * 8), new Point(1+i, i), new Size(2, 2));
+			}
 		}
 
 		public static void Update()
 		{
 			foreach (BaseObject obj in _objs) obj.Update();
+			foreach (BaseObject obj in _objs2) obj.Update();
 		}
 	}
 }
