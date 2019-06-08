@@ -49,12 +49,12 @@ namespace Starship_fighter
 
 		}
 
-		public static void Draw(Form form)
+		public static void Draw()
 		{
-			Bitmap MyB = new Bitmap("imge.png");
-			Graphics MyG;
-			MyG = form.CreateGraphics();
-			MyG.DrawImage(MyB, 10, 10);
+			//Bitmap MyB = new Bitmap("aster.png");
+			//Graphics MyG;
+			//MyG = form.CreateGraphics();
+			//MyG.DrawImage(MyB, 10, 10);
 			// Проверяем вывод графики
 			Buffer.Graphics.Clear(Color.Black);
 
@@ -66,10 +66,13 @@ namespace Starship_fighter
 			Buffer.Render();
 			foreach (BaseObject obj in _objs2) obj.Draw();
 			Buffer.Render();
+			foreach (BaseObject obj in _objs3) obj.Draw();
+			Buffer.Render();
 		}
 		// массив с фигурами
 		public static BaseObject[] _objs;
 		public static BaseObject[] _objs2;
+		public static BaseObject[] _objs3;
 		/// <summary>
 		/// метод загрузки фигур в массив для последующего их выведения на экран
 		/// </summary>
@@ -77,6 +80,7 @@ namespace Starship_fighter
 		{
 			_objs = new BaseObject[60];
 			_objs2 = new BaseObject[30];
+			_objs3 = new BaseObject[5];
 			//for (int i = 0; i < _objs.Length / 2; i++)
 			//{
 			//	_objs[i] = new BaseObject(new Point(600, i * 20), new Point(-i, -i), new Size(20, 20));
@@ -100,6 +104,12 @@ namespace Starship_fighter
 			for (int i = _objs2.Length / 2; i < _objs2.Length; i++)
 			{
 				_objs2[i] = new SpaceTrash2(new Point(450, i * 19), new Point(1 + i, i), new Size(3, 3));
+				//_objs2[i] = new Asteroids(new Point(450, i * 19), new Point(1 + i, i), new Size(3, 3));
+			}
+			for (int i = 0; i < _objs3.Length; i++)
+			{
+				
+				_objs3[i] = new Asteroids(new Point(0, i * 120), new Point(1 + i, i), new Size(3, 3));
 			}
 		}
 
@@ -107,6 +117,7 @@ namespace Starship_fighter
 		{
 			foreach (BaseObject obj in _objs) obj.Update();
 			foreach (BaseObject obj in _objs2) obj.Update();
+			foreach (BaseObject obj in _objs3) obj.Update();
 		}
 	}
 }
