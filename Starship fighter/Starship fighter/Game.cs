@@ -42,12 +42,9 @@ namespace Starship_fighter
 				Update();
 			}
 			//таймер
-			Timer timer = new Timer { Interval = 100 };
+			Timer timer = new Timer { Interval = 10 };
 			timer.Start();
 			timer.Tick += Timer_Tick;
-
-
-
 		}
 
 		public static void Draw()
@@ -60,14 +57,13 @@ namespace Starship_fighter
 			Buffer.Render();
 			_bullet.Draw();
 			Buffer.Render();
-
 		}
 
 		private static Bullet _bullet;
 		// массивы с фигурами
 		public static BaseObject[] _objs;
 		private static Asteroid[] _asteroids;
-
+		//загржаем объекты на экран
 		public static void Load()
 		{
 			_objs = new BaseObject[30];
@@ -76,8 +72,7 @@ namespace Starship_fighter
 			var rnd = new Random();
 
 			//пули
-
-			_bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
+			_bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(1, 400));
 		
 
 			//звёзды
@@ -94,15 +89,29 @@ namespace Starship_fighter
 			}
 			
 		}
-
+		//обновляем отрисовку
 		public static void Update()
 		{
+			var rnd = new Random();
 			foreach (BaseObject obj in _objs)
 				obj.Update();
 			foreach (Asteroid a in _asteroids)
 			{
 				a.Update();
-				if (a.Collision(_bullet)) { System.Media.SystemSounds.Hand.Play(); }
+				// проверка на столкновение пуль и астероидов
+				if (a.Collision(_bullet))
+				{
+					int f = rnd.Next(1, 1000);
+					System.Media.SystemSounds.Hand.Play();
+					//реген пуль
+					_bullet = new Bullet(new Point(0, f), new Point(5, 0), new Size(1, 400));
+					//реген астероидов
+					for (var i = 0; i < _asteroids.Length; i++)
+					{
+						int r = rnd.Next(5, 20);
+						_asteroids[i] = new Asteroid(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
+					}
+				}
 			}
 			_bullet.Update();
 

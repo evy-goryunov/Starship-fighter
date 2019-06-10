@@ -9,6 +9,7 @@ namespace Starship_fighter
 {
 	class Bullet : BaseObject
 	{
+		Random r = new Random();
 		public Bullet(Point pos, Point dir, Size size) : base(pos, dir, size)
 		{
 		}
@@ -19,7 +20,13 @@ namespace Starship_fighter
 		}
 		public override void Update()
 		{
+			int i = r.Next(1, 1000);
 			Pos.X = Pos.X + 3;
+			if (Pos.X > Game.Width)
+			{
+				Pos.X = 0;
+				Pos.Y = i;
+			}
 		}
 	}
 }
