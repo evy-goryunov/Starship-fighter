@@ -10,6 +10,7 @@ namespace Starship_fighter
 {
 	static class Game
 	{
+
 		private static BufferedGraphicsContext _context;
 		public static BufferedGraphics Buffer;
 		// Свойства, ширина и высота игрового поля
@@ -51,73 +52,60 @@ namespace Starship_fighter
 
 		public static void Draw()
 		{
-			//Bitmap MyB = new Bitmap("aster.png");
-			//Graphics MyG;
-			//MyG = form.CreateGraphics();
-			//MyG.DrawImage(MyB, 10, 10);
-			// Проверяем вывод графики
 			Buffer.Graphics.Clear(Color.Black);
-
-			//Buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(100, 100, 200, 200));
-			//Buffer.Graphics.FillEllipse(Brushes.Wheat, new Rectangle(100, 100, 200, 200));
-			
 			//выводим массив BaseObject _objs на экран
 			foreach (BaseObject obj in _objs) obj.Draw();
 			Buffer.Render();
-			foreach (BaseObject obj in _objs2) obj.Draw();
+			foreach (Asteroid obj in _asteroids) obj.Draw();
 			Buffer.Render();
-			foreach (BaseObject obj in _objs3) obj.Draw();
+			_bullet.Draw();
 			Buffer.Render();
+
 		}
-		// массив с фигурами
+
+		private static Bullet _bullet;
+		// массивы с фигурами
 		public static BaseObject[] _objs;
-		public static BaseObject[] _objs2;
-		public static BaseObject[] _objs3;
-		/// <summary>
-		/// метод загрузки фигур в массив для последующего их выведения на экран
-		/// </summary>
+		private static Asteroid[] _asteroids;
+
 		public static void Load()
 		{
-			_objs = new BaseObject[60];
-			_objs2 = new BaseObject[30];
-			_objs3 = new BaseObject[5];
-			//for (int i = 0; i < _objs.Length / 2; i++)
-			//{
-			//	_objs[i] = new BaseObject(new Point(600, i * 20), new Point(-i, -i), new Size(20, 20));
-			//}
+			_objs = new BaseObject[30];
+			_asteroids = new Asteroid[3];
 
-			for(int i = 0; i < _objs.Length / 2; i++)
-			{                                 //X   //Y            //X  //Y
-				_objs[i] = new Star(new Point(700, i*20), new Point(20+i, 0), new Size(5, 5));
-			}                                            //значение смещения //размер фигуры
+			var rnd = new Random();
 
-			for (int i = _objs.Length / 2; i < _objs.Length; i++)
-			{
-				_objs[i] = new SpaceTrash(new Point(100, i * 5), new Point(i, i), new Size(1, 1));
-			}
+			//пули
 
-			for (int i = 0; i < _objs2.Length / 2; i++)
-			{
-				_objs2[i] = new SpaceTrash(new Point(350, i * 8), new Point(1 + i, i), new Size(2, 2));
-			}
+			_bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
+		
 
-			for (int i = _objs2.Length / 2; i < _objs2.Length; i++)
+			//звёзды
+			for (var i = 0; i < _objs.Length; i++)
 			{
-				_objs2[i] = new SpaceTrash2(new Point(450, i * 19), new Point(1 + i, i), new Size(3, 3));
-				//_objs2[i] = new Asteroids(new Point(450, i * 19), new Point(1 + i, i), new Size(3, 3));
+				int r = rnd.Next(5, 20);
+				_objs[i] = new Star(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r, r), new Size(3, 3));
 			}
-			for (int i = 0; i < _objs3.Length; i++)
+			//астероиды
+			for (var i = 0; i <_asteroids.Length; i++)
 			{
-				
-				_objs3[i] = new Asteroids(new Point(0, i * 120), new Point(1 + i, i), new Size(3, 3));
+				int r = rnd.Next(5, 20);
+				_asteroids[i] = new Asteroid(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
 			}
+			
 		}
 
 		public static void Update()
 		{
-			foreach (BaseObject obj in _objs) obj.Update();
-			foreach (BaseObject obj in _objs2) obj.Update();
-			foreach (BaseObject obj in _objs3) obj.Update();
+			foreach (BaseObject obj in _objs)
+				obj.Update();
+			foreach (Asteroid a in _asteroids)
+			{
+				a.Update();
+				if (a.Collision(_bullet)) { System.Media.SystemSounds.Hand.Play(); }
+			}
+			_bullet.Update();
+
 		}
 	}
 }

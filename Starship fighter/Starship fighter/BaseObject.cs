@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Starship_fighter
 {
-	abstract class BaseObject
+	abstract class BaseObject : ICollision
 	{
 		protected Point Pos;
 		protected Point Dir;
@@ -19,11 +19,22 @@ namespace Starship_fighter
 			Dir = dir;
 			Size = size;
 		}
+		//draw и update реализуем в наследниках
 		public abstract void Draw();
-		public virtual void Update()
+		public abstract void Update();
+
+		// реализуем интерфейс столконовений объектов
+		public bool Collision(ICollision o)
 		{
-			Pos.X = Pos.X + Dir.X;
-			if (Pos.X < 0) Pos.X = Game.Width + Size.Width;
+			return o.Rect.IntersectsWith(this.Rect);
+		}
+
+		public Rectangle Rect
+		{
+			get
+			{
+				return new Rectangle(Pos, Size);
+			}
 		}
 	}
 
