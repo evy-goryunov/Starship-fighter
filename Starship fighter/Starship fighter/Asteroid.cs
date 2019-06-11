@@ -17,7 +17,19 @@ namespace Starship_fighter
 
 		public override void Draw()
 		{
-			Game.Buffer.Graphics.FillEllipse(Brushes.White, Pos.X, Pos.Y, Size.Width, Size.Height);
+			// --->работа пользовательского исключения для 5 задания<---
+			try
+			{
+				Game.Buffer.Graphics.FillEllipse(Brushes.White, Pos.X, Pos.Y, Size.Width, Size.Height);
+				if (Size.Width > 100)
+				{
+					throw new MyExep("Слишком большой размер", 1);
+				}
+			}
+			catch(MyExep e)
+			{
+				Console.WriteLine(e.Message);
+			}
 		}
 
 		public object Clone()

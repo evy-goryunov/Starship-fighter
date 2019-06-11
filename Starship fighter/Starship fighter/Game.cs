@@ -30,8 +30,16 @@ namespace Starship_fighter
 			// Создаем объект (поверхность рисования) и связываем его с формой
 			g = form.CreateGraphics();
 			// Запоминаем размеры формы
-			Width = form.ClientSize.Width;
-			Height = form.ClientSize.Height;
+			// --->Исключение для 4 задания<---
+			try
+			{
+				Width = form.ClientSize.Width;
+				Height = form.ClientSize.Height;
+			}
+			catch (ArgumentOutOfRangeException e)
+			{
+				Console.WriteLine("Неверный размер экрана");
+			}
 			// Связываем буфер в памяти с графическим объектом, чтобы рисовать в буфере
 			Buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
@@ -42,7 +50,7 @@ namespace Starship_fighter
 				Update();
 			}
 			//таймер
-			Timer timer = new Timer { Interval = 10 };
+			Timer timer = new Timer { Interval = 100 };
 			timer.Start();
 			timer.Tick += Timer_Tick;
 		}
@@ -60,7 +68,7 @@ namespace Starship_fighter
 		}
 
 		private static Bullet _bullet;
-		// массивы с фигурами
+		//массивы с фигурами
 		public static BaseObject[] _objs;
 		private static Asteroid[] _asteroids;
 		//загржаем объекты на экран
@@ -72,20 +80,19 @@ namespace Starship_fighter
 			var rnd = new Random();
 
 			//пули
-			_bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(1, 400));
-		
-
+			_bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(6, 1));
 			//звёзды
 			for (var i = 0; i < _objs.Length; i++)
 			{
 				int r = rnd.Next(5, 20);
 				_objs[i] = new Star(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r, r), new Size(3, 3));
+
 			}
 			//астероиды
 			for (var i = 0; i <_asteroids.Length; i++)
 			{
 				int r = rnd.Next(5, 20);
-				_asteroids[i] = new Asteroid(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
+				_asteroids[i] = new Asteroid(new Point(1100, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
 			}
 			
 		}
@@ -104,7 +111,7 @@ namespace Starship_fighter
 					int f = rnd.Next(1, 1000);
 					System.Media.SystemSounds.Hand.Play();
 					//реген пуль
-					_bullet = new Bullet(new Point(0, f), new Point(5, 0), new Size(1, 400));
+					_bullet = new Bullet(new Point(0, f), new Point(5, 0), new Size(4, 1));
 					//реген астероидов
 					for (var i = 0; i < _asteroids.Length; i++)
 					{

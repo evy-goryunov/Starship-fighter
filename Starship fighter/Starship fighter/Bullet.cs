@@ -16,7 +16,7 @@ namespace Starship_fighter
 
 		public override void Draw()
 		{
-			Game.Buffer.Graphics.DrawRectangle(Pens.OrangeRed, Pos.X, Pos.Y, Size.Width, Size.Height);
+				Game.Buffer.Graphics.DrawRectangle(Pens.OrangeRed, Pos.X, Pos.Y, Size.Width, Size.Height);
 		}
 		public override void Update()
 		{

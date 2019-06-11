@@ -19,24 +19,15 @@ namespace Starship_fighter
 	{
 		static void Main(string[] args)
 		{
-			try
-			{
-				Form mainForm = new Form
-				{
-					Width = Screen.PrimaryScreen.Bounds.Width,
-					Height = Screen.PrimaryScreen.Bounds.Height
-				};
-				Game.Init(mainForm);
-				mainForm.Show();
-				Game.Load();
-				Game.Draw();
-				Application.Run(mainForm);
-			}
+			Form mainForm = new Form { Width = Screen.PrimaryScreen.Bounds.Width, Height = Screen.PrimaryScreen.Bounds.Height };
+			Game.Init(mainForm);
+			mainForm.Show();
+			Game.Load();
+			Game.Draw();
+			Application.Run(mainForm);
+			
 
-			catch (ArgumentOutOfRangeException)
-			{
-				Console.WriteLine("Неверный размер экрана");
-			}
+
 		}
 	}
 }
