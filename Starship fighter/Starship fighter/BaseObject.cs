@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace Starship_fighter
 {
+	public delegate void Message();
+
 	abstract class BaseObject : ICollision
 	{
 		protected Point Pos;

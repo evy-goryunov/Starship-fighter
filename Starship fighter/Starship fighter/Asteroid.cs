@@ -38,7 +38,6 @@ namespace Starship_fighter
 			asteroid.Power = Power;
 			return asteroid;
 		}
-
 		public override void Update()
 		{
 			Pos.X = Pos.X + Dir.X;
