@@ -16,8 +16,10 @@ namespace Starship_fighter
 		// Свойства, ширина и высота игрового поля
 		public static int Width { get; set; }
 		public static int Height { get; set; }
+		//таймер
 		private static Timer _timer = new Timer();
 		public static Random Rnd = new Random();
+
 		static Game()
 		{
 		}
@@ -99,7 +101,7 @@ namespace Starship_fighter
 			var rnd = new Random();
 
 			//пули
-			_bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(6, 1));
+			//_bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(6, 1));
 			//звёзды
 			for (var i = 0; i < _objs.Length; i++)
 			{
@@ -118,29 +120,6 @@ namespace Starship_fighter
 		//обновляем отрисовку
 		public static void Update()
 		{
-			//var rnd = new Random();
-			//foreach (BaseObject obj in _objs)
-			//	obj.Update();
-			//foreach (Asteroid a in _asteroids)
-			//{
-			//	a.Update();
-			//	// проверка на столкновение пуль и астероидов
-			//	if (a.Collision(_bullet))
-			//	{
-			//		int f = rnd.Next(1, 1000);
-			//		System.Media.SystemSounds.Hand.Play();
-			//		//реген пуль
-			//		_bullet = new Bullet(new Point(0, f), new Point(5, 0), new Size(4, 1));
-			//		//реген астероидов
-			//		for (var i = 0; i < _asteroids.Length; i++)
-			//		{
-			//			int r = rnd.Next(5, 20);
-			//			_asteroids[i] = new Asteroid(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
-			//		}
-			//	}
-			//}
-			//_bullet.Update();
-
 			foreach (BaseObject obj in _objs) obj.Update();
 
 			_bullet?.Update();
@@ -162,8 +141,6 @@ namespace Starship_fighter
 				System.Media.SystemSounds.Asterisk.Play();
 				if (_ship.Energy <= 0) _ship?.Die();
 			}
-
-
 		}
 	}
 }
