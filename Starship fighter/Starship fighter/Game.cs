@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.IO;
+
 
 namespace Starship_fighter
 {
@@ -17,23 +19,38 @@ namespace Starship_fighter
 		public static int Width { get; set; }
 		public static int Height { get; set; }
 		//таймер
-		private static Timer _timer = new Timer();
+		private static Timer _timer = new Timer() { Interval = 20 };
 		public static Random Rnd = new Random();
 
 		static Game()
 		{
 		}
-
-		public static void Finish()
+		// запись в файл
+		public static void WriteToFile(string s)
+		{
+				StreamWriter sw = new StreamWriter("log.txt", true);
+				sw.WriteLine(s);
+				sw.Close();
+		}
+		// вывод в консоль
+		public static void Finish(string s)
 		{
 			_timer.Stop();
+			Console.WriteLine(s);
 			Buffer.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline), Brushes.White, 200, 100);
 			Buffer.Render();
+		}
+		public static void Strike(string s)
+		{
+			Console.WriteLine(s);
+		}
+		public static void Bump(string s)
+		{
+			Console.WriteLine(s);
 		}
 
 		public static void Init(Form form)
 		{
-			Ship.MessageDie += Finish;
 			// обработчик событий нажатия клавиши
 			form.KeyDown += Form_KeyDown;
 			//Графическое устройство для вывода графики
@@ -62,10 +79,17 @@ namespace Starship_fighter
 				Draw();
 				Update();
 			}
-			//таймер
-			Timer timer = new Timer { Interval = 30 };
-			timer.Start();
-			timer.Tick += Timer_Tick;
+	
+			_timer.Start();
+			_timer.Tick += Timer_Tick;
+			//передаём нужные нам методы в event-ы
+			Ship.MessageDie += WriteToFile;
+			Ship.MessageDie += Finish;
+			Ship.Striking += WriteToFile;
+			Ship.Striking += Strike;
+			Ship.Bumping += WriteToFile;
+			Ship.Bumping += Bump;
+			
 		}
 		// обработчик событий нажатия клавиши
 		private static void Form_KeyDown(object sender, KeyEventArgs e)
@@ -133,13 +157,16 @@ namespace Starship_fighter
 					System.Media.SystemSounds.Hand.Play();
 					_asteroids[i] = null;
 					_bullet = null;
+					// вызов метода у экземпляра класса Ship который вызовет срабатывание event-а
+					_ship?.Str("Попадание по астероиду");
 					continue;
 				}
 				if (!_ship.Collision(_asteroids[i])) continue;
+				if (_ship.Collision(_asteroids[i])) _ship?.Bmp("Столкновение с астероидом");
 				var rnd = new Random();
-				_ship?.EnergyLow(rnd.Next(1, 10));
+				_ship?.EnergyLow(rnd.Next(99, 100));
 				System.Media.SystemSounds.Asterisk.Play();
-				if (_ship.Energy <= 0) _ship?.Die();
+				if (_ship.Energy <= 0) _ship?.Die("Окончание игры");
 			}
 		}
 	}

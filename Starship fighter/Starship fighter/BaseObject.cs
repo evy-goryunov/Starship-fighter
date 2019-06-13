@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Starship_fighter
 {
-	public delegate void Message();
+	public delegate void Message(string msg);
 
 	abstract class BaseObject : ICollision
 	{

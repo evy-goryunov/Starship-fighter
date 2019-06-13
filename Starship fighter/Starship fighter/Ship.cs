@@ -10,6 +10,8 @@ namespace Starship_fighter
 	class Ship : BaseObject
 	{
 		public static event Message MessageDie;
+		public static event Message Striking;
+		public static event Message Bumping;
 		// свойства
 		private int _energy = 100;
 		public int Energy => _energy;
@@ -40,10 +42,18 @@ namespace Starship_fighter
 		{
 			if (Pos.Y < Game.Height) Pos.Y = Pos.Y + Dir.Y;
 		}
-		public void Die()
-		{
-			MessageDie?.Invoke();
+		// методы вызывающий срабатывание event-в 
+		public void Die(string str)
+		{ 
+			MessageDie?.Invoke(str);
 		}
-
+		public void Str(string str)
+		{
+			Striking?.Invoke(str);
+		}
+		public void Bmp(string str)
+		{
+			Bumping?.Invoke(str);
+		}
 	}
 }
