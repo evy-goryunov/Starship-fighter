@@ -28,9 +28,6 @@ namespace Starship_fighter
 			Game.Load();
 			Game.Draw();
 			Application.Run(mainForm);
-			
-
-
 		}
 	}
 }

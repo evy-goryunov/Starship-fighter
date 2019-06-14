@@ -12,12 +12,23 @@ namespace Starship_fighter
 		public static event Message MessageDie;
 		public static event Message Striking;
 		public static event Message Bumping;
-		// свойства
+		// методы получения урона
 		private int _energy = 100;
+		private int _score = 0;
 		public int Energy => _energy;
 		public void EnergyLow(int n)
 		{
 			_energy -= n;
+		}
+		public int Score => _score;
+		public void ScorePlus(int f)
+		{
+			_score += f;
+		}
+		//метод лечения
+		public void EnergyHi(int n)
+		{
+			_energy += n;
 		}
 		// конструктор
 		public Ship(Point pos, Point dir, Size size) : base(pos, dir, size)

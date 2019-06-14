@@ -106,13 +106,16 @@ namespace Starship_fighter
 			foreach (Asteroid a in _asteroids) { a?.Draw(); }
 			_bullet?.Draw();
 			_ship?.Draw();
+			_firstAid?.Draw();
 			if (_ship != null)
 				Buffer.Graphics.DrawString("Energy:" + _ship.Energy, SystemFonts.DefaultFont, Brushes.White, 0, 0);
+				Buffer.Graphics.DrawString("Score:" + _ship.Score, SystemFonts.DefaultFont, Brushes.White, 100, 0);
 			Buffer.Render();
 		}
 
 		private static Ship _ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(10, 10));
 		private static Bullet _bullet;
+		private static FirstAitKit _firstAid;
 		//массивы с фигурами
 		public static BaseObject[] _objs;
 		private static Asteroid[] _asteroids;
@@ -139,7 +142,12 @@ namespace Starship_fighter
 				int r = rnd.Next(5, 20);
 				_asteroids[i] = new Asteroid(new Point(1100, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
 			}
+			//аптечки
 			
+			
+			int f = rnd.Next(5, 20);
+			_firstAid = new FirstAitKit(new Point(1100, rnd.Next(0, Game.Height)), new Point(-f / 5, f), new Size(25, 25), 25);
+
 		}
 		//обновляем отрисовку
 		public static void Update()
@@ -147,6 +155,7 @@ namespace Starship_fighter
 			foreach (BaseObject obj in _objs) obj.Update();
 
 			_bullet?.Update();
+			_firstAid?.Update();
 
 			for (var i = 0; i < _asteroids.Length; i++)
 			{
@@ -157,14 +166,23 @@ namespace Starship_fighter
 					System.Media.SystemSounds.Hand.Play();
 					_asteroids[i] = null;
 					_bullet = null;
+					_ship?.ScorePlus(1);
 					// вызов метода у экземпляра класса Ship который вызовет срабатывание event-а
 					_ship?.Str("Попадание по астероиду");
 					continue;
 				}
+				//логика срабатывания аптечки
+				if (_ship.Collision(_firstAid))
+				{
+					if (_ship.Energy < 100)
+					{
+						_ship?.EnergyHi(_firstAid.AidValue);
+					}
+				}
 				if (!_ship.Collision(_asteroids[i])) continue;
 				if (_ship.Collision(_asteroids[i])) _ship?.Bmp("Столкновение с астероидом");
 				var rnd = new Random();
-				_ship?.EnergyLow(rnd.Next(99, 100));
+				_ship?.EnergyLow(rnd.Next(1, 5));
 				System.Media.SystemSounds.Asterisk.Play();
 				if (_ship.Energy <= 0) _ship?.Die("Окончание игры");
 			}

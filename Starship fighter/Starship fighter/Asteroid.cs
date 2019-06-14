@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Starship_fighter
 {
-	class Asteroid : BaseObject, ICloneable
+	class Asteroid : BaseObject, ICloneable, IComparable
 	{
-		public int Power { get; set; }
+		public int Power { get; set; } = 3;
 		public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
 		{
 			Power = 1;
@@ -32,10 +32,24 @@ namespace Starship_fighter
 			}
 		}
 
+		int IComparable.CompareTo(object obj)
+		{
+			if (obj is Asteroid temp)
+			{
+				if (Power > temp.Power)
+					return 1;
+				if (Power < temp.Power)
+					return -1;
+				else
+					return 0;
+			}
+			throw new ArgumentException("Parameter is not а Asteroid!");
+		}
+
+
 		public object Clone()
 		{
-			Asteroid asteroid = new Asteroid(new Point(Pos.X, Pos.Y), new Point(Dir.X, Dir.Y), new Size(Size.Width, Size.Height));
-			asteroid.Power = Power;
+			Asteroid asteroid = new Asteroid(new Point(Pos.X, Pos.Y), new Point(Dir.X, Dir.Y), new Size(Size.Width, Size.Height)) { Power = Power};
 			return asteroid;
 		}
 		public override void Update()
