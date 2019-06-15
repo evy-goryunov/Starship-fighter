@@ -20,6 +20,7 @@ namespace Starship_fighter
 		{
 			_energy -= n;
 		}
+		//увеличение очков
 		public int Score => _score;
 		public void ScorePlus(int f)
 		{

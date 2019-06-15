@@ -166,6 +166,7 @@ namespace Starship_fighter
 					System.Media.SystemSounds.Hand.Play();
 					_asteroids[i] = null;
 					_bullet = null;
+					//+1 к счёту за сбитый астероид
 					_ship?.ScorePlus(1);
 					// вызов метода у экземпляра класса Ship который вызовет срабатывание event-а
 					_ship?.Str("Попадание по астероиду");
