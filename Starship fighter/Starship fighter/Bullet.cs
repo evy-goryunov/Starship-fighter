@@ -22,11 +22,11 @@ namespace Starship_fighter
 		{
 			int i = r.Next(1, 1000);
 			Pos.X = Pos.X + 3;
-			if (Pos.X > Game.Width)
-			{
-				Pos.X = 0;
-				Pos.Y = i;
-			}
+			//if (Pos.X > Game.Width)
+			//{
+			//	Pos.X = 0;
+			//	Pos.Y = i;
+			//}
 		}
 	}
 }
