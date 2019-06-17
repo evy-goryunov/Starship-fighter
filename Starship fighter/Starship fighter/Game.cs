@@ -12,8 +12,8 @@ namespace Starship_fighter
 {
 	static class Game
 	{
-		static int temp = asteroidCount; //счётчик кол-ва астероидов
 		static int asteroidCount = 3; // первоначальное кол-во астероидов
+		static int temp = asteroidCount; //счётчик кол-ва астероидов
 		private static BufferedGraphicsContext _context;
 		public static BufferedGraphics Buffer;
 		// Свойства, ширина и высота игрового поля
@@ -102,6 +102,7 @@ namespace Starship_fighter
 		// отрисовка объектов
 		public static void Draw()
 		{
+			
 			Buffer.Graphics.Clear(Color.Black);
 			foreach (BaseObject obj in _objs) obj.Draw();
 			foreach (Asteroid a in _asteroids) { a?.Draw(); }
@@ -123,8 +124,8 @@ namespace Starship_fighter
 		//загржаем объекты на экран
 		public static void Load()
 		{
+			Console.WriteLine(temp);
 			_objs = new BaseObject[30];
-
 			var rnd = new Random();
 			//звёзды
 			for (var i = 0; i < _objs.Length; i++)
@@ -141,10 +142,10 @@ namespace Starship_fighter
 			}
 			//аптечки
 			int f = rnd.Next(5, 20);
-			_firstAid = new FirstAitKit(new Point(1100, rnd.Next(0, Game.Height)), new Point(-f / 5, f), new Size(25, 25), 25);
+			_firstAid = new FirstAitKit(new Point(1100, rnd.Next(0, Game.Height)), new Point(-f / 5, f), new Size(25, 25), 10);
 
 		}
-
+		//астероиды
 		public static void DoAsteroids()
 		{
 			var rnd = new Random();
@@ -160,6 +161,7 @@ namespace Starship_fighter
 			
 			foreach (BaseObject obj in _objs) obj.Update();
 			foreach (Bullet b in _bullets) b.Update();
+			_firstAid?.Update();
 			for (var i = 0; i < _asteroids.Count; i++)
 			{
 				if (_asteroids[i] == null) continue;
@@ -181,72 +183,26 @@ namespace Starship_fighter
 						{
 							asteroidCount++;
 							temp = asteroidCount;
-							DoAsteroids();		
+							DoAsteroids();
+							Console.WriteLine(temp);
 						}
 					}
 				if (_asteroids[i] == null || !_ship.Collision(_asteroids[i])) continue;
-				_ship.EnergyLow(Rnd.Next(1, 10));
+				//логика срабатывания аптечки
+				if (_ship.Collision(_firstAid))
+				{
+					if (_ship.Energy < 100)
+					{
+						_ship?.EnergyHi(_firstAid.AidValue);
+					}
+				}
+				if (!_ship.Collision(_asteroids[i])) continue;
+				if (_ship.Collision(_asteroids[i])) _ship?.Bmp("Столкновение с астероидом");
+				var rnd = new Random();
+				_ship?.EnergyLow(rnd.Next(1, 5));
 				System.Media.SystemSounds.Asterisk.Play();
-				if (_ship.Energy <= 0) _ship.Die("Death");
+				if (_ship.Energy <= 0) _ship?.Die("Окончание игры");
 			}
 		}
-
-
-		//обновляем отрисовку
-		//public static void Update()
-		//{
-		//	foreach (BaseObject obj in _objs) obj.Update();
-
-		//	foreach (Bullet b in _bullets) b.Update();
-		//	_firstAid?.Update();
-
-		//	for (var i = 0; i < _asteroids.Count; i++)
-		//	{
-		//		if (_asteroids[i] == null) continue;
-		//		_asteroids[i].Update();
-		//		for (int j = 0; j < _bullets.Count; j++)
-		//		{
-		//			if (_asteroids[i] != null && _bullets[j].Collision(_asteroids[i]))
-		//			{
-		//				int temp = asteroidCount;
-		//				System.Media.SystemSounds.Hand.Play();
-		//				//_asteroids[i] = null;
-		//				_asteroids.RemoveAt(i);
-		//				_bullets.RemoveAt(j);
-		//				j--;
-		//				asteroidCount--;
-		//				//+1 к счёту за сбитый астероид
-		//				_ship?.ScorePlus(1);
-		//				Console.WriteLine(_asteroids.Count);
-		//				// вызов метода у экземпляра класса Ship который вызовет срабатывание event-а
-		//				_ship?.Str("Попадание по астероиду");
-		//				if (asteroidCount == 0)
-		//				{
-		//					asteroidCount = temp + 1;
-		//					DoAsteroids();						
-		//				}
-
-		//				continue;
-		//			}
-
-		//		}
-
-		//		if (_asteroids[i] == null || !_ship.Collision(_asteroids[i])) continue;
-		//		//логика срабатывания аптечки
-		//		if (_ship.Collision(_firstAid))
-		//		{
-		//			if (_ship.Energy < 100)
-		//			{
-		//				_ship?.EnergyHi(_firstAid.AidValue);
-		//			}
-		//		}
-		//		if (!_ship.Collision(_asteroids[i])) continue;
-		//		if (_ship.Collision(_asteroids[i])) _ship?.Bmp("Столкновение с астероидом");
-		//		var rnd = new Random();
-		//		_ship?.EnergyLow(rnd.Next(1, 10));
-		//		System.Media.SystemSounds.Asterisk.Play();
-		//		if (_ship.Energy <= 0) _ship?.Die("Окончание игры");
-		//	}
-		//}
 	}
 }
