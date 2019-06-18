@@ -155,10 +155,8 @@ namespace Starship_fighter
 				_asteroids.Add(new Asteroid(new Point(1100, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r)));
 			}
 		}
-		
 		public static void Update()
 		{
-			
 			foreach (BaseObject obj in _objs) obj.Update();
 			foreach (Bullet b in _bullets) b.Update();
 			_firstAid?.Update();
@@ -169,7 +167,6 @@ namespace Starship_fighter
 				for (int j = 0; j < _bullets.Count; j++)
 					if (_asteroids[i] != null && _bullets[j].Collision(_asteroids[i]))
 					{
-						
 						System.Media.SystemSounds.Hand.Play();
 						//_asteroids.RemoveAt(i);
 						_asteroids[i] = null;
